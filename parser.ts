@@ -38,7 +38,11 @@ function isEmpty(obj: {
 }
 
 export class OSMTransform extends Transform {
-  with: { withTags: {}; withInfo: boolean; writeRaw: any };
+  with: { withTags: {
+    node: string[];
+    way: any[];
+    relation: string[];
+}; withInfo: boolean; writeRaw: any };
   buffer?: Buffer;
   offset: number;
   status: number;
@@ -46,8 +50,8 @@ export class OSMTransform extends Transform {
   inflate_ns?: bigint;
 
   constructor(
-    osmopts = { withTags: true, withInfo: false, writeRaw: false },
-    opts = {}
+    osmopts: { withTags?: boolean | any; withInfo?: boolean; writeRaw?: boolean } = { withTags: true, withInfo: false, writeRaw: false },
+    opts: { withTags?: boolean | any; withInfo?: boolean; writeRaw?: boolean } = { withTags: true, withInfo: false, writeRaw: false}
   ) {
     super(
       Object.assign({}, opts, {
@@ -187,7 +191,7 @@ export function parse(buf: ArrayBuffer | undefined, that: any) {
     data.withInfo = that.withInfo ?? false;
   }
   data.strings = data.stringtable.s.map(
-    (b: { toString: (arg0: string) => any }) => b.toString("utf8")
+    (b: any) => b.toString("utf8")
   );
   data.date_granularity = data.date_granularity || 1000;
   data.granularity =
@@ -469,7 +473,14 @@ function fill_info(
 
 export async function* createOSMStream(
   file: PathLike,
-  opts: { withTags: boolean; withInfo: boolean; writeRaw: boolean } | undefined
+  opts?: { withTags?: boolean; withInfo?: boolean; writeRaw?: boolean } | {
+    withInfo: boolean;
+    withTags: {
+        node: string[];
+        way: any[];
+        relation: string[];
+    };
+}
 ) {
   const readable = createReadStream(file).pipe(new OSMTransform(opts));
   for await (const chunk of readable) {

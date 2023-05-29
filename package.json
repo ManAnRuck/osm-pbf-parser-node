@@ -2,11 +2,15 @@
     "name": "osm-pbf-parser-node",
     "version": "1.1.0",
     "description": "Streaming OpenStreetMap PBF parser for Node.js",
-    "main": "parser.js",
+    "main": "dist/bundle.js",
+    "types": "dist/bundle.d.ts",
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "rollup -c"
+        "build": "rollup -c ",
+        "pbf": "pnpm pbf:file && pnpm pbf:osm",
+        "pbf:file": "pbf proto/fileformat.proto --typescript > proto/fileformat.ts",
+        "pbf:osm": "pbf proto/osmformat.proto --typescript > proto/osmformat.ts"
     },
     "keywords": [
         "javascript",

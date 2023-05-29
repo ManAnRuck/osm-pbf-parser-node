@@ -5,6 +5,7 @@ import { get as http_get } from 'node:http';
 import { inflateSync } from 'node:zlib';
 
 // feel free to change the following three settings
+(async () => {
 
 let file = '../data/cyprus-latest.osm.pbf';
 let opts = {
@@ -162,3 +163,5 @@ try {
 } catch (err) {
     process.stderr.write(err.message || err);
 }
+
+})();

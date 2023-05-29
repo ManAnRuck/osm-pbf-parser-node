@@ -8,7 +8,7 @@ export default [
     output: [
       {
         file: `dist/bundle.js`,
-        format: 'cjs',
+        format: 'esm',
         sourcemap: true,
         // exports: 'default',
       },
